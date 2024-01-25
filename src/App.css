@@ -1,6 +1,161 @@
+@font-face {
+  font-family: "Poppins-Bold";
+  src: url("src/assets/fonts/Poppins-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-BoldItalic";
+  src: url("src/assets/fonts/Poppins-BoldItalic.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-ExtraBold";
+  src: url("src/assets/fonts/Poppins-ExtraBold.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-ExtraBoldItalic";
+  src: url("src/assets/fonts/Poppins-ExtraBoldItalic.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-Italic";
+  src: url("src/assets/fonts/Poppins-Italic.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-Regular";
+  src: url("src/assets/fonts/Poppins-Regular.ttf");
+}
+
+
 :root {
+  /* VARIABLES */
+  
+  /* Primary colors */
+  --color-purple: hsl(259, 100%, 65%);
+  --color-light-red: hsl(0, 100%, 67%);
+
+  /* Neutral colors */
+  --color-white: hsl(0, 0%, 100%);
+  --color-off-white: hsl(0, 0%, 94%;);
+  --color-light-grey: hsl(0, 0%, 86%);
+  --color-smokey-grey: hsl(0, 1%, 44%);
+  --color-off-black: hsl(0, 0%, 8%);
+
+  /* Fonts */
+  --font-poppins-bold: "Poppins-Bold";
+  --font-poppins-bold-italic: "Poppins-BoldItalic";
+  --font-poppins-extra-bold: "Poppins-ExtraBold";
+  --font-poppins-extra-bold-italic: "Poppins-ExtraBoldItalic";
+  --font-poppins-italic: "Poppins-Italic";
+  --font-poppins-regular: "Poppins-Regular";
+}
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-size: 16px;
+}
+
+.wrapper {
+  height: 100dvh;
+  padding: 1rem;
+  background-color: var(--color-light-grey);
+}
+
+.calculatorBox {
+  height: 500px;
+  display: grid;
+  grid-template-rows: 1fr 1.25fr 2.5fr;
+  background-color: white;
+  border-radius: 1.5rem 1.5rem 6rem 1.5rem;
+  padding: 2rem 7% 2rem 7%;
+}
+
+.ageInputBox {
+  grid-row: 1/2;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputBox {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+label {
+  color: var(--color-smokey-grey);
+  font-family: var(--font-poppins-bold);
+  letter-spacing: 3px;
+}
+
+input {
+  width: 100%;
+  height: 3rem;
+  border-style: solid;
+  border-color: var(--color-light-grey);
+  border-width: 1px;
+  border-radius: 0.5rem;
+  color: var(--color-off-black);
+  font-size: 1.5rem;
+  font-family: var(--font-poppins-bold);
+  padding: 0.75rem;
+  text-align: start;
+}
+
+.divider {
+  grid-column: 1/-1;
+  grid-row: 2/3;
+  width: 100%;
+  height: 2px;
+  align-self: center;
+  justify-self: center;
+  background-color: var(--color-light-grey);
+}
+
+.arrowIcon {
+  width: 4rem;
+  grid-column: 1/-1;
+  grid-row: 2/3;
+  align-self: center;
+  justify-self: center;
+  background-color: var(--color-purple);
+  border-radius: 100%;
+  padding: 1rem;
+}
+
+.ageTextBox {
+  grid-column: 1/2;
+  grid-row: 3/4;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-poppins-extra-bold-italic);
+}
+
+.ageTextBox p {
+  color: var(--color-off-black);
+  font-size: 3rem;
+
+}
+
+.ageTextBox p span {
+  color: var(--color-purple);
+  font-size: 3rem;
+}
+
+
+@media screen and (min-width: 600px) {
+  .calculatorBox {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .arrowIcon {
+    justify-self: self-end;
+  }
 }
