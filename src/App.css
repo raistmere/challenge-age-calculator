@@ -119,15 +119,25 @@ input {
   background-color: var(--color-light-grey);
 }
 
-.arrowIcon {
+.arrowButton {
   width: 4rem;
+  height: 4rem;
   grid-column: 1/-1;
   grid-row: 2/3;
   align-self: center;
   justify-self: center;
   background-color: var(--color-purple);
   border-radius: 100%;
+  border-style: none;
   padding: 1rem;
+}
+
+.arrowButton:hover {
+  background-color: var(--color-off-black);
+}
+
+.arrowIcon {
+  width: 100%;
 }
 
 .ageTextBox {
