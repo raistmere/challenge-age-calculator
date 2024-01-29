@@ -4,28 +4,70 @@ import arrowIcon from "./assets/images/icon-arrow.svg";
 
 function App() {
   // States
-  const [inputErrorMessages, setInputErrorMessages] = useState<string[]>(["", "", ""]);
-  const [days, setDays] = useState<string>("--")
-  const [months, setMonths] = useState<string>("--")
-  const [years, setYears] = useState<string>("--")
+  const [dayInputError, setDayInputError] = useState<boolean>(false);
+  const [monthInputError,setMonthInputError] = useState<boolean>(false);
+  const [yearInputError, setYearInputError] = useState<boolean>(false);
+  const [days, setDays] = useState<string>("--");
+  const [months, setMonths] = useState<string>("--");
+  const [years, setYears] = useState<string>("--");
 
   // 
   const checkForInputs = (input: FormData) => {
-    const inputDay: number = input.has("dayInput") ? parseInt(input.get("dayInput") as string) : 0;
-    const inputMonth: number = input.has("monthInput") ? parseInt(input.get("monthInput") as string) : 0;
-    const inputYear: number = input.has("yearInput") ? parseInt(input.get("yearInput") as string) : 0;
 
-    let currentErrors = inputErrorMessages;
-    // check if user input for day is valid
-    if(inputDay < 31 && inputDay > 0 && isNaN(inputDay)) currentErrors[0] = "";
-    
+    // DAY INPUT VALIDITY \\
+    // Setup
+    const dayRegex : RegExp = /\b[0-9]{1,2}\b/g;
+    const dayInput: string = input.has("dayInput") ? input.get("dayInput") as string : "";
+    let errorFlag = false; 
+    // 
+    if(!dayRegex.test(dayInput) || parseInt(dayInput) <= 0 || parseInt(dayInput) > 31) {
+      setDayInputError(true);
+      errorFlag = true;
+    }
+    else {
+      setDayInputError(false);
+    }
+
+    // MONTH INPUT VALIDITY \\
+    // Setup
+    const monthRegex : RegExp = /\b[0-9]{1,2}\b/g;
+    const monthInput: string = input.has("monthInput") ? input.get("monthInput") as string : "";
+    if(!monthRegex.test(monthInput) || parseInt(monthInput) <= 0 || parseInt(monthInput) > 12) {
+      setMonthInputError(true);
+      errorFlag = true;
+    }
+    else {
+      setMonthInputError(false);
+    }
+
+    // YEAR INPUT VALIDITY \\
+    // Setup
+    const yearRegex : RegExp = /\b[0-9]{4}\b/g;
+    const yearInput: string = input.has("yearInput") ? input.get("yearInput") as string : "";
+    const currentYear : number = (new Date()).getFullYear();
+    if(!yearRegex.test(yearInput) || parseInt(yearInput) <= 0 || parseInt(yearInput) > currentYear) {
+      setYearInputError(true);
+      errorFlag = true;
+    }
+    else {
+      setYearInputError(false);
+    }
+
+    // If input is valid we calculate age
+    if(errorFlag)
+    {
+      setDays("--");
+      setMonths("--");
+      setYears("--");
+    }
+    else
+    {
+      calculateAge(input);
+    }
   }
 
   // 
   const calculateAge = (input : FormData) => {
-
-    console.log(input);
-
     // Grab data from formData
     const inputDay: number = input.has("dayInput") ? parseInt(input.get("dayInput") as string) : 0;
     const inputMonth: number = input.has("monthInput") ? parseInt(input.get("monthInput") as string) : 0;
@@ -51,19 +93,48 @@ function App() {
     <>
       <div className='wrapper'>
         <div className="calculatorBox">
-          <form className="ageInputBox" id='ageInputForm' onSubmit={(e) => {e.preventDefault(); calculateAge(new FormData(e.currentTarget));}}>
+          <form className="ageInputBox" id='ageInputForm' noValidate onSubmit={(e) => {e.preventDefault(); checkForInputs(new FormData(e.currentTarget));}}>
             <div className="inputBox">
-              <label htmlFor="dayInput">DAY</label>
-              <input type="number" id='dayInput' name='dayInput' required min={1} max={31} />
-              <span className='error'>Error</span>
+              {dayInputError === true ?
+                <>
+                  <label htmlFor="dayInput" className="error">DAY</label>
+                  <input type="number" id='dayInput' name='dayInput' className="error"/>
+                  <span className='errorMessage'>Must be a valid day</span> 
+                </> 
+                :
+                <>
+                  <label htmlFor="dayInput">DAY</label>
+                  <input type="number" id='dayInput' name='dayInput' placeholder='DD'/>
+                </> 
+              }
             </div>
             <div className="inputBox">
-              <label htmlFor="monthInput">MONTH</label>
-              <input type="number" id='monthInput' name='monthInput'/>
+              {monthInputError === true ?
+                <>
+                  <label htmlFor="monthInput" className="error">MONTH</label>
+                  <input type="number" id='monthInput' name='monthInput' className='error' />
+                  <span className='errorMessage'>Must be a valid month</span>
+                </> 
+                :
+                <>
+                  <label htmlFor="monthInput">MONTH</label>
+                  <input type="number" id='monthInput' name='monthInput'placeholder='MM'/>
+                </> 
+              }
             </div>
             <div className="inputBox">
-              <label htmlFor="yearInput">YEAR</label>
-              <input type="number" id='yearInput' name='yearInput'/>
+              {yearInputError === true ?
+                <>
+                  <label htmlFor="yearInput" className='error'>YEAR</label>
+                  <input type="number" id='yearInput' name='yearInput'className='error' />
+                  <span className='errorMessage'>Must be in the past</span>
+                </> 
+                :
+                <>
+                  <label htmlFor="yearInput">YEAR</label>
+                  <input type="number" id='yearInput' name='yearInput' placeholder='YYYY'/>
+                </> 
+              }
             </div>
           </form>
           <div className="divider"></div>
@@ -74,13 +145,13 @@ function App() {
           {/* HTML for age results */}
           <div className="ageTextBox">
             <p>
-              <span>{years !== "" ? years : "--"}</span> years
+              <span>{years}</span> years
             </p>
             <p>
-              <span>{months !== "" ? months : "--"}</span> months
+              <span>{months}</span> months
             </p>
             <p>
-              <span>{days !== "" ? days : "--"}</span> days
+              <span>{days}</span> days
             </p>
           </div>
         </div>
