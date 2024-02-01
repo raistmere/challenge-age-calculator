@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css'
 import arrowIcon from "./assets/images/icon-arrow.svg";
 
@@ -10,6 +10,48 @@ function App() {
   const [days, setDays] = useState<string>("--");
   const [months, setMonths] = useState<string>("--");
   const [years, setYears] = useState<string>("--");
+  const [yearsCounter, setYearsCounter] = useState<number>(0);
+  const [monthsCounter, setMonthsCounter] = useState<number>(0);
+  const [daysCounter, setDaysCounter] = useState<number>(0);
+
+  useEffect(() => {
+    if(yearsCounter >= parseInt(years) || years == "--") return;
+
+    const counter = setTimeout(() => {
+      setYearsCounter((prev) => prev + 1);
+    }, 100);
+
+    return (() => {
+      clearTimeout(counter);
+    })
+
+  }, [yearsCounter])
+
+  useEffect(() => {
+    if(monthsCounter >= parseInt(months) || months == "--") return;
+
+    const counter = setTimeout(() => {
+      setMonthsCounter((prev) => prev + 1);
+    }, 100);
+
+    return (() => {
+      clearTimeout(counter);
+    })
+
+  }, [monthsCounter])
+
+  useEffect(() => {
+    if(daysCounter >= parseInt(days) || days == "--") return;
+
+    const counter = setTimeout(() => {
+      setDaysCounter((prev) => prev + 1);
+    }, 100);
+
+    return (() => {
+      clearTimeout(counter);
+    })
+
+  }, [daysCounter])
 
   // 
   const checkForInputs = (input: FormData) => {
@@ -77,7 +119,7 @@ function App() {
     const currentDay: number = currentFullDate.getDate();
     const currentMonth: number = currentFullDate.getMonth();
     const currentYear: number = currentFullDate.getFullYear();
-    //Calculate days
+    // Calculate days
     const DAYS_PER_MONTH = 31;
     const MONTHS_PER_YEAR = 12;
     const totalDays: number = currentDay > inputDay ? currentDay - inputDay : (DAYS_PER_MONTH + currentDay) - inputDay;
@@ -87,6 +129,10 @@ function App() {
     setDays(totalDays.toString());
     setMonths(totalMonths.toString());
     setYears(totalYears.toString());
+    // Start the counters for increment animations
+    setYearsCounter(1);
+    setMonthsCounter(1);
+    setDaysCounter(1);
   }
 
   return (
@@ -145,22 +191,17 @@ function App() {
           {/* HTML for age results */}
           <div className="ageTextBox">
             <p>
-              <span>{years}</span> years
+              <span>{yearsCounter === 0 ? "--" : yearsCounter}</span> years
             </p>
             <p>
-              <span>{months}</span> months
+              <span>{monthsCounter === 0 ? "--" : monthsCounter}</span> months
             </p>
             <p>
-              <span>{days}</span> days
+              <span>{daysCounter === 0 ? "--" : daysCounter}</span> days
             </p>
           </div>
         </div>
       </div>
-
-      {/* <div class="attribution">
-        Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-        Coded by <a href="#">Your Name Here</a>.
-      </div> */}
     </>
   )
 }
